@@ -16,6 +16,33 @@
   </nav>
 
   <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-    <h1>Real-time measurements</h1>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="col">
+          <label class="sr-only" for="exampleFormControlSelect1">Reading:</label>
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option selected>Reading</option>
+            <option>PHASE VOLTAGE L1-N</option>
+            <option>PHASE VOLTAGE L2-N</option>
+            <option>ACTIVE ENERGY L3</option>
+            <option>REACTIVE ENERGY L1</option>
+            <option>REACTIVE ENERGY L2</option>
+            <option>REACTIVE ENERGY L3</option>
+          </select>
+        </div>
+        <div class="col">
+          <label class="sr-only" for="startdate">From:</label>
+          <input type="date" class="form-control" id="startdate" placeholder="from" />
+        </div>
+        <div class="col">
+          <label class="sr-only" for="enddate">To:</label>
+          <input type="date" class="form-control" id="enddate" placeholder="to" />
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+      </div>
+    </form>
+    <hr>
   </main>
 </div>

@@ -17,30 +17,28 @@
 
   <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
     <h1>Periodic measurements</h1>
-    <form>
+    <form (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="col">
           <label class="sr-only" for="exampleFormControlSelect1">Reading:</label>
-          <select class="form-control" id="exampleFormControlSelect1">
-            <option selected>Reading</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+          <select name="reading" placeholder="test" [(ngModel)]="chosenReading" class="form-control" id="exampleFormControlSelect1">
+            <option selected>Choose...</option>
+            <option *ngFor="let r of readingOptions" [value]="r.id">{{r.name}}</option>
           </select>
         </div>
         <div class="col">
           <label class="sr-only" for="startdate">From:</label>
-          <input type="date" class="form-control" id="startdate" placeholder="from" />
+          <input type="date" name="startdate" (ngModelChange)="startDate = $event" [ngModel]="startDate" class="form-control" id="startdate" />
         </div>
         <div class="col">
           <label class="sr-only" for="enddate">To:</label>
-          <input type="date" class="form-control" id="enddate" placeholder="to" />
+          <input type="date" name="enddate" (ngModelChange)="endDate = $event" [ngModel]="endDate" class="form-control" id="enddate" />
         </div>
         <div class="col">
           <button type="submit" class="btn btn-primary">Filter</button>
         </div>
       </div>
     </form>
+    <hr>
   </main>
 </div>
