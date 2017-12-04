@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   login = function() {
     // alert('hello');
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/dashboard/overview']);
   }
 
   ngOnInit() {

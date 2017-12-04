@@ -30,6 +30,14 @@ const routes: Routes = [
             {
                 path: '',
                 component: OverviewComponent
+            },
+            {
+                path: 'periodic',
+                component: PeriodicComponent
+            },
+            {
+                path: 'real-time',
+                component: RealTimeComponent
             }
         ]
     }
