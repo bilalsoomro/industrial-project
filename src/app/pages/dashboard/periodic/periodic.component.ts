@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Reading, PERIODIC_READINGS_LIST, 
   randomScalingFactor, randomDate, getRandomInt } from '../../../providers/mock-data';
-
+import * as Chart from 'chart.js';
+//declare var $:any;
+//import * as $ from 'jquery';
 @Component({
   selector: 'app-periodic',
   templateUrl: './periodic.component.html',
@@ -15,6 +17,51 @@ export class PeriodicComponent implements OnInit {
   chosenReading: any = 'Choose...';
   mockData: Reading[] = [];
   originalData: Reading[] = [];
+
+  lineconfig = {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+          label: "",
+          backgroundColor: 'red',
+          borderColor: 'red',
+          data: [],
+          fill: false,
+      }]
+    },
+    options: {
+      // responsive: true,
+      title:{
+          display: true,
+          text:'Reading'
+      },
+      tooltips: {
+          mode: 'index',
+          intersect: false,
+      },
+      hover: {
+          mode: 'nearest',
+          intersect: true
+      },
+      scales: {
+          xAxes: [{
+              display: true,
+              scaleLabel: {
+                  display: true,
+                  labelString: 'Time'
+              }
+          }],
+          yAxes: [{
+              display: true,
+              scaleLabel: {
+                  display: true,
+                  labelString: 'Value'
+              }
+          }]
+      }
+    }
+  };
 
   constructor() { }
 
@@ -33,6 +80,7 @@ export class PeriodicComponent implements OnInit {
 
   filter() {
     let self = this;
+    self.mockData = self.originalData.slice();
     console.log('reading chosen: ', self.chosenReading);
     console.log("start Date: ", self.startDate);
     console.log("end Date: ", self.endDate);
@@ -57,6 +105,26 @@ export class PeriodicComponent implements OnInit {
         let date = new Date(self.endDate);
         return a.timestamp.valueOf() <= date.valueOf();
       });
+    }
+  }
+
+  view() {
+    var self = this;
+
+    if(isNaN(self.chosenReading)) {
+      console.log('hit 1')
+      alert('Pick a type to filter!');
+    } else {
+      console.log('hit 2')
+      self.filter();
+      const line = <HTMLCanvasElement> document.getElementById("line-chart");
+      let linectx = line.getContext("2d");
+      self.mockData.forEach(function(reading: Reading) {
+        self.lineconfig.data.labels.push(reading.timestamp.toLocaleString());
+        self.lineconfig.data.datasets[0].data.push(reading.value);
+      })
+      new Chart(linectx, self.lineconfig);
+      // $('#periodic-modal').modal();
     }
   }
 
