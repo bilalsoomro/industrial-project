@@ -13,10 +13,7 @@ export class PeriodicComponent implements OnInit {
   startDate: Date = null;
   endDate: Date = null;
   chosenReading: any = 'Choose...';
-  // showTable: boolean = false;
-
   mockData: Reading[] = [];
-
   originalData: Reading[] = [];
 
   constructor() { }
@@ -62,8 +59,6 @@ export class PeriodicComponent implements OnInit {
       });
     }
   }
-
-
 
   clear() {
     this.mockData = this.originalData.slice();
