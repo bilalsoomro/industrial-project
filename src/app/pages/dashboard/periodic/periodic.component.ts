@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Reading, PERIODIC_READINGS_LIST, randomScalingFactor, randomDate } from '../../../providers/mock-data';
+import { Reading, PERIODIC_READINGS_LIST, 
+  randomScalingFactor, randomDate, getRandomInt } from '../../../providers/mock-data';
 
 @Component({
   selector: 'app-periodic',
@@ -22,7 +23,8 @@ export class PeriodicComponent implements OnInit {
 
   ngOnInit() {
     for(let i = 0; i < 100; i++) {
-      this.mockData.push(new Reading(i, randomDate(new Date(2017, 0, 1), new Date()), randomScalingFactor(), 'volt'));
+      let type = this.readingOptions[getRandomInt(0, 5)];
+      this.mockData.push(new Reading(i, randomDate(new Date(2017, 0, 1), new Date()), type.id, type.name, randomScalingFactor(), type.unit));
     }
 
     this.mockData.sort(function (a, b) {
@@ -33,12 +35,35 @@ export class PeriodicComponent implements OnInit {
   }
 
   filter() {
-    console.log('reading chosen: ', this.chosenReading);
-    console.log("start Date: ", this.startDate);
-    console.log("end Date: ", this.endDate);
+    let self = this;
+    console.log('reading chosen: ', self.chosenReading);
+    console.log("start Date: ", self.startDate);
+    console.log("end Date: ", self.endDate);
 
-    // if(this.startDate != n)
+    if(!isNaN(self.chosenReading)) {
+      self.mockData = self.mockData.filter(function(a) {
+        return a.typeId === self.chosenReading;
+      });
+    } else {
+      alert('Pick a type to filter!');
+    }
+
+    if(self.startDate != null) {
+      self.mockData = self.mockData.filter(function(a) {
+        let date = new Date(self.startDate);
+        return a.timestamp.valueOf() >= date.valueOf();
+      });
+    }
+
+    if(self.endDate != null) {
+      self.mockData = self.mockData.filter(function(a) {
+        let date = new Date(self.endDate);
+        return a.timestamp.valueOf() <= date.valueOf();
+      });
+    }
   }
+
+
 
   clear() {
     this.mockData = this.originalData.slice();

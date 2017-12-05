@@ -23,7 +23,7 @@
           <label class="sr-only" for="exampleFormControlSelect1">Reading:</label>
           <select name="reading" placeholder="test" [(ngModel)]="chosenReading" class="form-control" id="exampleFormControlSelect1">
             <option selected>Choose...</option>
-            <option *ngFor="let r of readingOptions" [value]="r.id">{{r.name}}</option>
+            <option *ngFor="let r of readingOptions" [ngValue]="r.id">{{r.name}}</option>
           </select>
         </div>
         <div class="col">
@@ -55,6 +55,7 @@
           <tr>
             <th>#</th>
             <th>Timestamp</th>
+            <th>Type</th>
             <th>Value</th>
             <th>Unit</th>
           </tr>
@@ -63,6 +64,7 @@
           <tr *ngFor="let r of mockData; let myIndex = index">
             <td>{{myIndex}}</td>
             <td>{{r.timestamp | date:'short'}}</td>
+            <td>{{r.typeName}}</td>
             <td>{{r.value}}</td>
             <td>{{r.unit}}</td>
           </tr>

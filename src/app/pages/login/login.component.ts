@@ -13,8 +13,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router) { }
 
-  login = function() {
-    // alert('hello');
+  login = function(event) {
     this.router.navigate(['/dashboard/overview']);
   }
 
