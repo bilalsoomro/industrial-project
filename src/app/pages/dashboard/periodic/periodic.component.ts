@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Reading, PERIODIC_READINGS_LIST, 
   randomScalingFactor, randomDate, getRandomInt } from '../../../providers/mock-data';
 import * as Chart from 'chart.js';
-//declare var $:any;
+declare var $ : any;
 //import * as $ from 'jquery';
 @Component({
   selector: 'app-periodic',
@@ -31,7 +31,6 @@ export class PeriodicComponent implements OnInit {
       }]
     },
     options: {
-      // responsive: true,
       title:{
           display: true,
           text:'Reading'
@@ -81,9 +80,9 @@ export class PeriodicComponent implements OnInit {
   filter() {
     let self = this;
     self.mockData = self.originalData.slice();
-    console.log('reading chosen: ', self.chosenReading);
-    console.log("start Date: ", self.startDate);
-    console.log("end Date: ", self.endDate);
+    // console.log('reading chosen: ', self.chosenReading);
+    // console.log("start Date: ", self.startDate);
+    // console.log("end Date: ", self.endDate);
 
     if(!isNaN(self.chosenReading)) {
       self.mockData = self.mockData.filter(function(a) {
@@ -112,19 +111,25 @@ export class PeriodicComponent implements OnInit {
     var self = this;
 
     if(isNaN(self.chosenReading)) {
-      console.log('hit 1')
       alert('Pick a type to filter!');
     } else {
-      console.log('hit 2')
       self.filter();
       const line = <HTMLCanvasElement> document.getElementById("line-chart");
       let linectx = line.getContext("2d");
-      self.mockData.forEach(function(reading: Reading) {
+      self.mockData.forEach(function(reading: Reading, i) {
+        if(i == 0) {
+          self.lineconfig.options.title.text = reading.typeName;
+        }
         self.lineconfig.data.labels.push(reading.timestamp.toLocaleString());
         self.lineconfig.data.datasets[0].data.push(reading.value);
+      });
+      
+      let lineChart = new Chart(linectx, self.lineconfig);
+      $('.periodic-modal').modal();
+      $('.periodic-modal').on('hidden.bs.modal', function (e) {
+        // console.log('modal is hidden');
+        lineChart.destroy();
       })
-      new Chart(linectx, self.lineconfig);
-      // $('#periodic-modal').modal();
     }
   }
 
