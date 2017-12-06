@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Reading, REALTIME_READINGS_LIST, 
-  randomScalingFactor, getRandomInt } from '../../../providers/mock-data';
+import { Reading, REALTIME_READINGS_LIST, randomScalingFactor } from '../../../providers/mock-data';
 import * as Chart from 'chart.js';
 
 @Component({
@@ -10,12 +9,9 @@ import * as Chart from 'chart.js';
 })
 export class RealTimeComponent implements OnInit {
 
-  readingOptions: any []  = REALTIME_READINGS_LIST;
-  startDate: Date = null;
-  endDate: Date = null;
+  readingOptions: any[] = REALTIME_READINGS_LIST;
   chosenReading: any = this.readingOptions[0].id;
   mockData: Reading[] = [];
-  originalData: Reading[] = [];
   myInterval = null;
 
   lineconfig = {
@@ -23,41 +19,41 @@ export class RealTimeComponent implements OnInit {
     data: {
       labels: [],
       datasets: [{
-          label: "",
-          backgroundColor: 'red',
-          borderColor: 'red',
-          data: [],
-          fill: false,
+        label: "",
+        backgroundColor: 'red',
+        borderColor: 'red',
+        data: [],
+        fill: false,
       }]
     },
     options: {
-      title:{
-          display: true,
-          text: this.readingOptions[0].name
+      title: {
+        display: true,
+        text: this.readingOptions[0].name
       },
       tooltips: {
-          mode: 'index',
-          intersect: false,
+        mode: 'index',
+        intersect: false,
       },
       hover: {
-          mode: 'nearest',
-          intersect: true
+        mode: 'nearest',
+        intersect: true
       },
       scales: {
-          xAxes: [{
-              display: true,
-              scaleLabel: {
-                  display: true,
-                  labelString: 'Time'
-              }
-          }],
-          yAxes: [{
-              display: true,
-              scaleLabel: {
-                  display: true,
-                  labelString: 'Value'
-              }
-          }]
+        xAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Time'
+          }
+        }],
+        yAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Value'
+          }
+        }]
       }
     }
   };
@@ -68,14 +64,14 @@ export class RealTimeComponent implements OnInit {
     let self = this;
     let lineChart;
 
-    const line = <HTMLCanvasElement> document.getElementById("realtime-line-chart");
+    const line = <HTMLCanvasElement>document.getElementById("realtime-line-chart");
     let linectx = line.getContext("2d");
     lineChart = new Chart(linectx, self.lineconfig);
 
     let currentSelectedReading = self.chosenReading;
 
-    self.myInterval = setInterval(function() {
-      if(self.chosenReading != currentSelectedReading) {
+    self.myInterval = setInterval(function () {
+      if (self.chosenReading != currentSelectedReading) {
         self.clearData(lineChart);
         currentSelectedReading = self.chosenReading
         self.lineconfig.options.title.text = self.readingOptions[self.chosenReading - 1].name
@@ -101,18 +97,20 @@ export class RealTimeComponent implements OnInit {
   }
 
   addData(chart, label, data) {
-    if(chart.data.labels.length > 20) {
+    if (chart.data.labels.length > 20) {
       chart.data.labels.shift();
     }
+
     chart.data.labels.push(label);
 
     chart.data.datasets.forEach((dataset) => {
-        if(dataset.data.length > 20) {
-          dataset.data.shift();
-        }
-        dataset.data.push(data);
+      if (dataset.data.length > 20) {
+        dataset.data.shift();
+      }
+      dataset.data.push(data);
     });
+
     chart.update();
-}
+  }
 
 }
