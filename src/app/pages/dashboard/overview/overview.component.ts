@@ -21,6 +21,7 @@ export class OverviewComponent implements OnInit {
   readingOptions: any[] = OVERVIEW_READINGS_LIST;
   mockData: Reading[] = [];
 
+  // lineconfig contains the config for the line graph in the overview page
   lineconfig = {
     type: 'line',
     data: {
@@ -60,17 +61,20 @@ export class OverviewComponent implements OnInit {
     }
   };
 
+  // generates a random number between 1 and 100
   randomScalingFactor() {
     return Math.round(Math.random() * 100);
   };
 
   constructor() {
-    let self = this;
   }
 
+  // this function runs when this overview page starts
   ngOnInit() {
     var self = this;
 
+
+    // generate dummy data for the various measurements of this overview page
     for (let j = 0; j < self.readingOptions.length; j++) {
       let type = self.readingOptions[j];
 
@@ -93,6 +97,7 @@ export class OverviewComponent implements OnInit {
       }
     }
 
+    // initialize chart based on config and dummy data
     const line = <HTMLCanvasElement>document.getElementById("overview-line-chart");
     let linectx = line.getContext("2d");
     new Chart(linectx, self.lineconfig);

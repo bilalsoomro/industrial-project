@@ -1,3 +1,4 @@
+// mock data of preiodic measurements available
 export const PERIODIC_READINGS_LIST: any = [
     { id: 1, name: 'ACTIVE ENERGY L1', unit: 'Wh * 100' },
     { id: 2, name: 'ACTIVE ENERGY L2', unit: 'Wh * 100' },
@@ -7,6 +8,7 @@ export const PERIODIC_READINGS_LIST: any = [
     { id: 6, name: 'REACTIVE ENERGY L3', unit: 'VArh * 100' }
 ];
 
+// mock data of real-time measurements available
 export const REALTIME_READINGS_LIST: any = [
     { id: 1, name: 'PHASE VOLTAGE L1-N', unit: 'volt' },
     { id: 2, name: 'PHASE VOLTAGE L2-N', unit: 'volt' },
@@ -19,6 +21,7 @@ export const REALTIME_READINGS_LIST: any = [
     { id: 9, name: 'LINE CURRENT L3', unit: 'mA' }
 ];
 
+// mock data for multiple measurements for overview UI
 export const OVERVIEW_READINGS_LIST: any = [
     { id: 1, name: 'ACTIVE ENERGY L1', unit: 'Wh * 100' },
     { id: 2, name: 'ACTIVE ENERGY L2', unit: 'Wh * 100' },
@@ -28,6 +31,7 @@ export const OVERVIEW_READINGS_LIST: any = [
     { id: 3, name: 'PHASE VOLTAGE L3-N', unit: 'volt' },
 ];
 
+// this function generates a random color used in graphs
 export function getRandomColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -37,18 +41,22 @@ export function getRandomColor() {
     return color;
 }
 
+// this function generates a random number between 0 to 250
 export function randomScalingFactor() {
     return Math.round(Math.random() * 250);
 };
 
+// this function generates a random date based on start and end date parameters
 export function randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
+// this function generates a random number between provided min and max
 export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// This class represents a single reading
 export class Reading {
     id: number;
     timestamp: Date;

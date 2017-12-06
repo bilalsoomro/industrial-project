@@ -7,8 +7,7 @@ import { OverviewComponent } from './pages/dashboard/overview/overview.component
 import { PeriodicComponent } from './pages/dashboard/periodic/periodic.component';
 import { RealTimeComponent } from './pages/dashboard/real-time/real-time.component';
 
-// import { AuthService } from "./providers/auth-service";
-
+// defines the routes based on the urls
 const routes: Routes = [
     {
         path: '',
@@ -41,33 +40,6 @@ const routes: Routes = [
             }
         ]
     }
-    /* {
-        path: 'home',
-        component: HomeComponent,
-        canActivate: [AuthService],
-        children: [
-            {
-                path: 'overview',
-                component: OverviewComponent
-            },
-            {
-                path: '',
-                component: OverviewComponent
-            },
-            {
-                path: 'reports',
-                component: ReportsComponent
-            },
-            {
-                path: 'boxes',
-                component: BoxesComponent
-            },
-            {
-                path: 'users',
-                component: UsersComponent
-            }
-        ]
-    } */
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

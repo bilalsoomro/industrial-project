@@ -14,6 +14,7 @@ export class RealTimeComponent implements OnInit {
   mockData: Reading[] = [];
   myInterval = null;
 
+  // contains the config of the line graph
   lineconfig = {
     type: 'line',
     data: {
@@ -60,22 +61,29 @@ export class RealTimeComponent implements OnInit {
 
   constructor() { }
 
+  // runs on the start of the real-time page
   ngOnInit() {
     let self = this;
     let lineChart;
 
+    // initializes the graph
     const line = <HTMLCanvasElement>document.getElementById("realtime-line-chart");
     let linectx = line.getContext("2d");
     lineChart = new Chart(linectx, self.lineconfig);
 
     let currentSelectedReading = self.chosenReading;
 
+    // set an interval to generate new dummy value every 1 second
     self.myInterval = setInterval(function () {
+
+      // if the selected measurement is changed, the graph needs to be cleared and the label changed
       if (self.chosenReading != currentSelectedReading) {
         self.clearData(lineChart);
         currentSelectedReading = self.chosenReading
         self.lineconfig.options.title.text = self.readingOptions[self.chosenReading - 1].name
       }
+
+      // generate dummy data and update graph
       let type = self.readingOptions[self.chosenReading - 1];
       let val = randomScalingFactor();
       var d = new Date();
@@ -84,10 +92,13 @@ export class RealTimeComponent implements OnInit {
     }, 1000);
   }
 
+  // runs when page is closed
   OnDestroy() {
+    // clear the interval
     clearInterval(this.myInterval);
   }
 
+  // clears the graph for when a different real-time measurement is selected
   clearData(chart) {
     chart.data.labels = [];
     chart.data.datasets.forEach((dataset) => {
@@ -96,6 +107,7 @@ export class RealTimeComponent implements OnInit {
     chart.update();
   }
 
+  // adds new data to the graphs and calls update
   addData(chart, label, data) {
     if (chart.data.labels.length > 20) {
       chart.data.labels.shift();

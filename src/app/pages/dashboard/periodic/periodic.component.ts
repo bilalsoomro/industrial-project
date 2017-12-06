@@ -11,6 +11,7 @@ declare var $ : any;
 })
 export class PeriodicComponent implements OnInit {
 
+  // below are the various variables used in the UI and in the logic
   readingOptions: any = PERIODIC_READINGS_LIST;
   startDate: Date = null;
   endDate: Date = null;
@@ -18,6 +19,7 @@ export class PeriodicComponent implements OnInit {
   mockData: Reading[] = [];
   originalData: Reading[] = [];
 
+  // contains the config for the line graph
   lineconfig = {
     type: 'line',
     data: {
@@ -64,6 +66,7 @@ export class PeriodicComponent implements OnInit {
 
   constructor() { }
 
+  // this function runs on page start, it generates random data for the graph
   ngOnInit() {
     for(let i = 0; i < 100; i++) {
       let type = this.readingOptions[getRandomInt(0, 5)];
@@ -77,6 +80,8 @@ export class PeriodicComponent implements OnInit {
     this.originalData = this.mockData.slice();
   }
 
+  // this function is called when the filter button is pressed
+  // It checks to see which filters have been selected and filters the data based on the users choices
   filter() {
     let self = this;
     self.mockData = self.originalData.slice();
@@ -107,6 +112,8 @@ export class PeriodicComponent implements OnInit {
     }
   }
 
+  // this function runs when the view button is pressed
+  // it opens a modal to show the line graph based on the selected filter
   view() {
     var self = this;
 
@@ -133,6 +140,8 @@ export class PeriodicComponent implements OnInit {
     }
   }
 
+  // this function is called when the clear button is pressed
+  // it clears the filters chosen by the user
   clear() {
     this.mockData = this.originalData.slice();
     this.startDate = null;

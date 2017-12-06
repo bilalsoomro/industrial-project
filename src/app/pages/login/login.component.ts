@@ -13,6 +13,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router) { }
 
+  // this function is called when the login button is pressed
+  // currently has no validation and just redirects to daskboard
   login = function(event) {
     this.router.navigate(['/dashboard/overview']);
   }
