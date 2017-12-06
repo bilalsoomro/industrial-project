@@ -93,7 +93,7 @@ export class OverviewComponent implements OnInit {
       }
     }
 
-    const line = <HTMLCanvasElement>document.getElementById("line-chart");
+    const line = <HTMLCanvasElement>document.getElementById("overview-line-chart");
     let linectx = line.getContext("2d");
     new Chart(linectx, self.lineconfig);
 

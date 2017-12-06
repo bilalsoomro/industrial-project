@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Reading, REALTIME_READINGS_LIST, 
   randomScalingFactor, getRandomInt } from '../../../providers/mock-data';
+import * as Chart from 'chart.js';
 
 @Component({
   selector: 'app-real-time',
@@ -9,69 +10,109 @@ import { Reading, REALTIME_READINGS_LIST,
 })
 export class RealTimeComponent implements OnInit {
 
-  readingOptions: any = REALTIME_READINGS_LIST;
+  readingOptions: any []  = REALTIME_READINGS_LIST;
   startDate: Date = null;
   endDate: Date = null;
-  chosenReading: any = 'Choose...';
+  chosenReading: any = this.readingOptions[0].id;
   mockData: Reading[] = [];
   originalData: Reading[] = [];
   myInterval = null;
+
+  lineconfig = {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+          label: "",
+          backgroundColor: 'red',
+          borderColor: 'red',
+          data: [],
+          fill: false,
+      }]
+    },
+    options: {
+      title:{
+          display: true,
+          text: this.readingOptions[0].name
+      },
+      tooltips: {
+          mode: 'index',
+          intersect: false,
+      },
+      hover: {
+          mode: 'nearest',
+          intersect: true
+      },
+      scales: {
+          xAxes: [{
+              display: true,
+              scaleLabel: {
+                  display: true,
+                  labelString: 'Time'
+              }
+          }],
+          yAxes: [{
+              display: true,
+              scaleLabel: {
+                  display: true,
+                  labelString: 'Value'
+              }
+          }]
+      }
+    }
+  };
 
   constructor() { }
 
   ngOnInit() {
     let self = this;
+    let lineChart;
+
+    const line = <HTMLCanvasElement> document.getElementById("realtime-line-chart");
+    let linectx = line.getContext("2d");
+    lineChart = new Chart(linectx, self.lineconfig);
+
+    let currentSelectedReading = self.chosenReading;
+
     self.myInterval = setInterval(function() {
-      let type;
-      if(!isNaN(self.chosenReading)) {
-        type = self.readingOptions[self.chosenReading - 1];
-      } else {
-        type = self.readingOptions[getRandomInt(0, 8)];
+      if(self.chosenReading != currentSelectedReading) {
+        self.clearData(lineChart);
+        currentSelectedReading = self.chosenReading
+        self.lineconfig.options.title.text = self.readingOptions[self.chosenReading - 1].name
       }
-      self.mockData.unshift(new Reading(0, new Date(), type.id, type.name, randomScalingFactor(), type.unit));
+      let type = self.readingOptions[self.chosenReading - 1];
+      let val = randomScalingFactor();
+      var d = new Date();
+      self.mockData.unshift(new Reading(0, d, type.id, type.name, val, type.unit));
+      self.addData(lineChart, d.toLocaleTimeString(), val);
     }, 1000);
-
-    self.originalData = self.mockData.slice();
-  }
-
-  filter() {
-    let self = this;
-    console.log('reading chosen: ', self.chosenReading);
-    console.log("start Date: ", self.startDate);
-    console.log("end Date: ", self.endDate);
-
-    if(!isNaN(self.chosenReading)) {
-      self.mockData = self.mockData.filter(function(a) {
-        return a.typeId === self.chosenReading;
-      });
-    } else {
-      alert('Pick a type to filter!');
-    }
-
-    if(self.startDate != null) {
-      self.mockData = self.mockData.filter(function(a) {
-        let date = new Date(self.startDate);
-        return a.timestamp.valueOf() >= date.valueOf();
-      });
-    }
-
-    if(self.endDate != null) {
-      self.mockData = self.mockData.filter(function(a) {
-        let date = new Date(self.endDate);
-        return a.timestamp.valueOf() <= date.valueOf();
-      });
-    }
-  }
-
-  clear() {
-    this.mockData = [];
-    this.startDate = null;
-    this.endDate = null;
-    this.chosenReading = 'Choose...';
   }
 
   OnDestroy() {
     clearInterval(this.myInterval);
   }
+
+  clearData(chart) {
+    chart.data.labels = [];
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data = [];
+    })
+    chart.update();
+  }
+
+  addData(chart, label, data) {
+    if(chart.data.labels.length > 20) {
+      chart.data.labels.shift();
+    }
+    chart.data.labels.push(label);
+
+    chart.data.datasets.forEach((dataset) => {
+        if(dataset.data.length > 20) {
+          dataset.data.shift();
+        }
+        dataset.data.push(data);
+    });
+    chart.update();
+}
 
 }

@@ -20,35 +20,18 @@
     <form>
       <div class="form-row">
         <div class="col">
-          <label class="sr-only" for="exampleFormControlSelect1">Reading:</label>
+          <label for="exampleFormControlSelect1">Reading:</label>
           <select name="reading" placeholder="test" [(ngModel)]="chosenReading" class="form-control" id="exampleFormControlSelect1">
             <option selected>Choose...</option>
             <option *ngFor="let r of readingOptions" [ngValue]="r.id">{{r.name}}</option>
           </select>
         </div>
-        <div class="col">
-          <label class="sr-only" for="startdate">From:</label>
-          <input type="date" name="startdate" (ngModelChange)="startDate = $event" [ngModel]="startDate" class="form-control" id="startdate"
-          />
-        </div>
-        <div class="col">
-          <label class="sr-only" for="enddate">To:</label>
-          <input type="date" name="enddate" (ngModelChange)="endDate = $event" [ngModel]="endDate" class="form-control" id="enddate"
-          />
-        </div>
-        <div class="col-1">
-          <button (click)="filter()" type="submit" class="btn btn-primary">Filter</button>
-        </div>
-        <div class="col-1">
-          <button class="btn btn-success">View</button>
-        </div>
-        <div class="col-1">
-          <button (click)="clear()" class="btn btn-danger">Clear</button>
-        </div>
       </div>
     </form>
     <hr>
-    <!-- [ngClass]="{'invisible': !showTable, 'visible': showTable}" -->
+    <div class="row">
+      <canvas id="realtime-line-chart" height="100"></canvas>
+    </div>
     <div class="periodic-datatable table-responsive">
       <table class="table table-striped">
         <thead>

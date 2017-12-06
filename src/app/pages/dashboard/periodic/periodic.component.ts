@@ -114,7 +114,7 @@ export class PeriodicComponent implements OnInit {
       alert('Pick a type to filter!');
     } else {
       self.filter();
-      const line = <HTMLCanvasElement> document.getElementById("line-chart");
+      const line = <HTMLCanvasElement> document.getElementById("periodic-line-chart");
       let linectx = line.getContext("2d");
       self.mockData.forEach(function(reading: Reading, i) {
         if(i == 0) {
