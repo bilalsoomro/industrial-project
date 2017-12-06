@@ -19,8 +19,26 @@ export const REALTIME_READINGS_LIST: any = [
     { id: 9, name: 'LINE CURRENT L3', unit: 'mA' }
 ];
 
+export const OVERVIEW_READINGS_LIST: any = [
+    { id: 1, name: 'ACTIVE ENERGY L1', unit: 'Wh * 100' },
+    { id: 2, name: 'ACTIVE ENERGY L2', unit: 'Wh * 100' },
+    { id: 3, name: 'ACTIVE ENERGY L3', unit: 'Wh * 100' },
+    { id: 1, name: 'PHASE VOLTAGE L1-N', unit: 'volt' },
+    { id: 2, name: 'PHASE VOLTAGE L2-N', unit: 'volt' },
+    { id: 3, name: 'PHASE VOLTAGE L3-N', unit: 'volt' },
+];
+
+export function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 export function randomScalingFactor() {
-    return Math.round(Math.random() * 100);
+    return Math.round(Math.random() * 250);
 };
 
 export function randomDate(start, end) {

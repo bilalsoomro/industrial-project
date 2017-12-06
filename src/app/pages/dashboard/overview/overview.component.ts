@@ -1,5 +1,14 @@
+// import angular API
 import { Component, OnInit } from '@angular/core';
+
+// import chart functionalitu
 import * as Chart from 'chart.js';
+
+// import various required functions and mock data to generate dummy data
+import {
+  Reading, OVERVIEW_READINGS_LIST,
+  randomScalingFactor, randomDate, getRandomColor, getRandomInt
+} from '../../../providers/mock-data';
 
 @Component({
   selector: 'app-overview',
@@ -9,9 +18,47 @@ import * as Chart from 'chart.js';
 export class OverviewComponent implements OnInit {
 
   title = 'app';
-  pieconfig = {};
-  lineconfig = {};
-  barconfig = {};
+  readingOptions: any[] = OVERVIEW_READINGS_LIST;
+  mockData: Reading[] = [];
+
+  lineconfig = {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: []
+    },
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Sensire meter readings overview'
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
+      scales: {
+        xAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Timestamp'
+          }
+        }],
+        yAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Value'
+          }
+        }]
+      }
+    }
+  };
 
   randomScalingFactor() {
     return Math.round(Math.random() * 100);
@@ -19,141 +66,37 @@ export class OverviewComponent implements OnInit {
 
   constructor() {
     let self = this;
-    
-    self.pieconfig = {
-      type: 'pie',
-      data: {
-        datasets: [{
-          data: [
-            self.randomScalingFactor(),
-            self.randomScalingFactor(),
-            self.randomScalingFactor(),
-            self.randomScalingFactor(),
-            self.randomScalingFactor(),
-          ],
-          backgroundColor: [
-            'red',
-            'orange',
-            'yellow',
-            'green',
-            'blue',
-          ],
-          label: 'Dataset 1'
-        }],
-        labels: [
-          "Red",
-          "Orange",
-          "Yellow",
-          "Green",
-          "Blue"
-        ]
-      },
-      options: {
-        responsive: true
-      }
-    };
-
-    self.lineconfig = {
-      type: 'line',
-      data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "My First dataset",
-            backgroundColor: 'red',
-            borderColor: 'red',
-            data: [
-              self.randomScalingFactor(),
-              self.randomScalingFactor(),
-              self.randomScalingFactor(),
-              self.randomScalingFactor(),
-              self.randomScalingFactor(),
-              self.randomScalingFactor(),
-              self.randomScalingFactor()
-            ],
-            fill: false,
-        }]
-      },
-      options: {
-        responsive: true,
-        title:{
-            display:true,
-            text:'Some meter reading'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            xAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Month'
-                }
-            }],
-            yAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Value'
-                }
-            }]
-        }
-      }
-    };
-
-    self.barconfig = {
-      type: 'bar',
-      data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: 'Dataset 1',
-            backgroundColor: 'yelllow',
-            borderColor: 'red',
-            borderWidth: 1,
-            data: [
-                self.randomScalingFactor(),
-                self.randomScalingFactor(),
-                self.randomScalingFactor(),
-                self.randomScalingFactor(),
-                self.randomScalingFactor(),
-                self.randomScalingFactor(),
-                self.randomScalingFactor()
-            ]
-        }]
-      },
-      options: {
-          responsive: true,
-          legend: {
-              position: 'top',
-          },
-          title: {
-              display: true,
-              text: 'Another reading'
-          }
-      }
-    }
-   }
+  }
 
   ngOnInit() {
     var self = this;
-    
-    const pie = <HTMLCanvasElement> document.getElementById("pie-chart");
-    let piectx = pie.getContext("2d");
-    //window.myPie = new Chart(ctx, config);
-    new Chart(piectx, self.pieconfig);
 
-    const line = <HTMLCanvasElement> document.getElementById("line-chart");
+    for (let j = 0; j < self.readingOptions.length; j++) {
+      let type = self.readingOptions[j];
+
+      let color = getRandomColor();
+
+      self.lineconfig.data.datasets[j] = {
+        label: type.name,
+        backgroundColor: color,
+        borderColor: color,
+        data: [],
+        fill: false,
+      };
+
+      for (let i = 0; i < 20; i++) {
+        if (i == 0) {
+          let d = randomDate(new Date(2017, 0, 1), new Date());
+          self.lineconfig.data.labels.push(d.toLocaleString());
+        }
+        self.lineconfig.data.datasets[j].data.push(randomScalingFactor());
+      }
+    }
+
+    const line = <HTMLCanvasElement>document.getElementById("line-chart");
     let linectx = line.getContext("2d");
     new Chart(linectx, self.lineconfig);
 
-    const bar = <HTMLCanvasElement> document.getElementById("bar-chart");
-    let barctx = bar.getContext("2d");
-    new Chart(barctx, self.barconfig);
   }
 
 }
